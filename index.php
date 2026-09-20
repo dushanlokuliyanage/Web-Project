@@ -1,5 +1,27 @@
 <?php
+session_start();
+
 require_once __DIR__ . "/database.php";
+
+$user_initials = "";
+
+if (isset($_SESSION["user_id"])) {
+
+    $name_parts = preg_split(
+        "/\\s+/",
+        trim($_SESSION["name"] ?? "")
+    );
+
+    $user_initials = strtoupper(
+        substr($name_parts[0], 0, 1)
+    );
+
+    if (count($name_parts) > 1) {
+        $user_initials .= strtoupper(
+            substr($name_parts[count($name_parts) - 1], 0, 1)
+        );
+    }
+}
 
 $sql = "SELECT event_id, title, description, event_date, event_time, venue, image
         FROM events
@@ -55,6 +77,19 @@ if ($result === false) {
             color: white;
             text-decoration: none;
             margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .user-initials {
+            display: inline-flex;
+            width: 32px;
+            height: 32px;
+            margin-left: 20px;
+            background: white;
+            color: #17365d;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
         }
 
@@ -187,13 +222,31 @@ if ($result === false) {
             Home
         </a>
 
-        <a href="login.php">
-            Login
-        </a>
+        <?php if (isset($_SESSION["user_id"])): ?>
 
-        <a href="register.php">
-            Register
-        </a>
+            <a href="my_events.php">
+                My Event
+            </a>
+
+            <span class="user-initials">
+                <?php echo htmlspecialchars($user_initials); ?>
+            </span>
+
+            <a href="logout.php">
+                Logout
+            </a>
+
+        <?php else: ?>
+
+            <a href="login.php">
+                Login
+            </a>
+
+            <a href="register.php">
+                Register
+            </a>
+
+        <?php endif; ?>
 
     </div>
 
@@ -299,7 +352,7 @@ if ($result === false) {
 
                         <a
                             class="view-button"
-                            href="login.php"
+                            href="event_details.php?id=<?php echo htmlspecialchars($event["event_id"]); ?>"
                         >
                             View Event
                         </a>

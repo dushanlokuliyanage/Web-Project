@@ -533,7 +533,7 @@ body {
 
         <a
             class="back-button"
-            href="dashboard.php"
+            href="index.php"
         >
             ← Explore Events
         </a>
@@ -544,15 +544,10 @@ body {
 <?php endif; ?>
 
 
-<br>
 
 
-<a
-    class="back-button"
-    href="dashboard.php"
->
-    ← Back to Dashboard
-</a>
+
+
 
 
 </div>

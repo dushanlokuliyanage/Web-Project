@@ -913,7 +913,7 @@ body {
 
 <a
     class="back-button"
-    href="dashboard.php"
+    href="index.php"
 >
     ← Back to Events
 </a>

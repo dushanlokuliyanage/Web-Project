@@ -25,4 +25,25 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8mb4");
 
+/*
+ * This table is used by the dashboard, event details, and registrations pages.
+ * Keep this migration here so existing installations receive the missing table
+ * without requiring a manual database import.
+ */
+$registration_table_sql = "
+    CREATE TABLE IF NOT EXISTS event_registrations (
+        registration_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_id INT UNSIGNED NOT NULL,
+        event_id INT UNSIGNED NOT NULL,
+        registered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (registration_id),
+        UNIQUE KEY unique_event_registration (user_id, event_id),
+        KEY event_registrations_event_id (event_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+";
+
+if (!$conn->query($registration_table_sql)) {
+    die("Unable to initialize event registrations: " . $conn->error);
+}
+
 ?>

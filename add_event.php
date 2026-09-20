@@ -44,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $message = "Please fill all fields correctly.";
         $message_type = "error";
-
     } else {
 
 
@@ -96,21 +95,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     "Only JPG, JPEG, PNG, GIF and WEBP images are allowed.";
 
                 $message_type = "error";
-
             } elseif ($file_size > 5 * 1024 * 1024) {
 
                 $message =
                     "Image size must be less than 5MB.";
 
                 $message_type = "error";
-
             } elseif (@getimagesize($file_tmp) === false) {
 
                 $message =
                     "The uploaded file is not a valid image.";
 
                 $message_type = "error";
-
             } else {
 
                 /*
@@ -196,10 +192,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt === false) {
 
-                die(
-                    "Database error: " .
-                    $conn->error
-                );
+                die("Database error: " .
+                    $conn->error);
             }
 
 
@@ -222,7 +216,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     "Event added successfully! 🎉";
 
                 $message_type = "success";
-
             } else {
 
                 $message =
@@ -245,241 +238,237 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>
-    Add Event - NSBM EventHub
-</title>
+    <title>
+        Add Event - NSBM EventHub
+    </title>
 
 
-<style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-* {
-    box-sizing: border-box;
-}
+        body {
 
-body {
+            margin: 0;
 
-    margin: 0;
+            font-family: Arial, sans-serif;
 
-    font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
 
-    background: #f4f6f8;
-}
 
+        /* Header */
 
-/* Header */
+        .header {
 
-.header {
+            background: #17365d;
 
-    background: #17365d;
+            color: white;
 
-    color: white;
+            padding: 20px;
 
-    padding: 20px;
+            text-align: center;
+        }
 
-    text-align: center;
-}
+        .header h1 {
 
-.header h1 {
+            margin: 0;
+        }
 
-    margin: 0;
-}
 
+        /* Container */
 
-/* Container */
+        .container {
 
-.container {
+            max-width: 700px;
 
-    max-width: 700px;
+            margin: 40px auto;
 
-    margin: 40px auto;
+            background: white;
 
-    background: white;
+            padding: 30px;
 
-    padding: 30px;
+            border-radius: 10px;
 
-    border-radius: 10px;
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.1);
+        }
 
-    box-shadow:
-        0 3px 12px
-        rgba(0,0,0,0.1);
-}
 
+        /* Heading */
 
-/* Heading */
+        h2 {
 
-h2 {
+            text-align: center;
 
-    text-align: center;
+            color: #17365d;
+        }
 
-    color: #17365d;
-}
 
+        /* Labels */
 
-/* Labels */
+        label {
 
-label {
+            display: block;
 
-    display: block;
+            margin-top: 16px;
 
-    margin-top: 16px;
+            margin-bottom: 6px;
 
-    margin-bottom: 6px;
+            font-weight: bold;
+        }
 
-    font-weight: bold;
-}
 
+        /* Inputs */
 
-/* Inputs */
+        input,
+        textarea,
+        select {
 
-input,
-textarea,
-select {
+            width: 100%;
 
-    width: 100%;
+            padding: 11px;
 
-    padding: 11px;
+            border: 1px solid #ccc;
 
-    border: 1px solid #ccc;
+            border-radius: 5px;
 
-    border-radius: 5px;
+            font-size: 15px;
+        }
 
-    font-size: 15px;
-}
 
+        textarea {
 
-textarea {
+            height: 120px;
 
-    height: 120px;
+            resize: vertical;
+        }
 
-    resize: vertical;
-}
 
+        /* File input */
 
-/* File input */
+        input[type="file"] {
 
-input[type="file"] {
+            padding: 8px;
 
-    padding: 8px;
+            background: #f9f9f9;
+        }
 
-    background: #f9f9f9;
-}
 
+        /* Help text */
 
-/* Help text */
+        .help {
 
-.help {
+            font-size: 13px;
 
-    font-size: 13px;
+            color: #777;
 
-    color: #777;
+            margin-top: 5px;
+        }
 
-    margin-top: 5px;
-}
 
+        /* Button */
 
-/* Button */
+        button {
 
-button {
+            margin-top: 25px;
 
-    margin-top: 25px;
+            width: 100%;
 
-    width: 100%;
+            padding: 13px;
 
-    padding: 13px;
+            background: #17365d;
 
-    background: #17365d;
+            color: white;
 
-    color: white;
+            border: none;
 
-    border: none;
+            border-radius: 5px;
 
-    border-radius: 5px;
+            cursor: pointer;
 
-    cursor: pointer;
+            font-size: 16px;
 
-    font-size: 16px;
+            font-weight: bold;
+        }
 
-    font-weight: bold;
-}
+        button:hover {
 
-button:hover {
+            background: #0f2745;
+        }
 
-    background: #0f2745;
-}
 
+        /* Messages */
 
-/* Messages */
+        .message {
 
-.message {
+            text-align: center;
 
-    text-align: center;
+            margin-bottom: 20px;
 
-    margin-bottom: 20px;
+            padding: 12px;
 
-    padding: 12px;
+            border-radius: 5px;
 
-    border-radius: 5px;
+            font-weight: bold;
+        }
 
-    font-weight: bold;
-}
+        .success {
 
-.success {
+            background: #d4edda;
 
-    background: #d4edda;
+            color: #155724;
+        }
 
-    color: #155724;
-}
+        .error {
 
-.error {
+            background: #f8d7da;
 
-    background: #f8d7da;
+            color: #721c24;
+        }
 
-    color: #721c24;
-}
 
+        /* Back */
 
-/* Back */
+        .back {
 
-.back {
+            display: inline-block;
 
-    display: inline-block;
+            margin-top: 20px;
 
-    margin-top: 20px;
+            padding: 10px 16px;
 
-    padding: 10px 16px;
+            background: #777;
 
-    background: #777;
+            color: white;
 
-    color: white;
+            text-decoration: none;
 
-    text-decoration: none;
+            border-radius: 5px;
+        }
 
-    border-radius: 5px;
-}
 
+        /* Mobile */
 
-/* Mobile */
+        @media (max-width: 600px) {
 
-@media (max-width: 600px) {
+            .container {
 
-    .container {
+                width: 95%;
 
-        width: 95%;
+                padding: 20px;
+            }
 
-        padding: 20px;
-    }
-
-}
-
-</style>
-<script src="../js/script.js"></script>
+        }
+    </style>
+    <script src="../js/script.js"></script>
 
 </head>
 
@@ -487,212 +476,204 @@ button:hover {
 <body>
 
 
-<div class="header">
+    <div class="header">
 
-    <h1>
-        NSBM EventHub
-    </h1>
+        <h1>
+            NSBM EventHub
+        </h1>
 
-    <p>
-        Add New Event
-    </p>
-
-</div>
-
-
-<div class="container">
-
-
-<h2>
-    Create Event
-</h2>
-
-
-<?php if (!empty($message)): ?>
-
-    <div
-        class="message
-        <?php echo $message_type; ?>"
-    >
-
-        <?php
-        echo htmlspecialchars(
-            $message
-        );
-        ?>
+        <p>
+            Add New Event
+        </p>
 
     </div>
 
-<?php endif; ?>
+
+    <div class="container">
 
 
-<form
-    method="POST"
-    enctype="multipart/form-data"
-    id="eventForm"
->
+        <h2>
+            Create Event
+        </h2>
 
 
-<!-- Title -->
+        <?php if (!empty($message)): ?>
 
-<label>
-    Event Title
-</label>
+            <div
+                class="message
+        <?php echo $message_type; ?>">
 
-<input
-    type="text"
-    name="title"
-    placeholder="Enter event title"
-    required
->
+                <?php
+                echo htmlspecialchars(
+                    $message
+                );
+                ?>
 
+            </div>
 
-<!-- Description -->
-
-<label>
-    Description
-</label>
-
-<textarea
-    name="description"
-    placeholder="Enter event description"
-    required
-></textarea>
+        <?php endif; ?>
 
 
-<!-- Date -->
-
-<label>
-    Event Date
-</label>
-
-<input
-    type="date"
-    name="event_date"
-    required
->
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="eventForm">
 
 
-<!-- Time -->
+            <!-- Title -->
 
-<label>
-    Event Time
-</label>
+            <label>
+                Event Title
+            </label>
 
-<input
-    type="time"
-    name="event_time"
-    required
->
-
-
-<!-- Venue -->
-
-<label>
-    Venue
-</label>
-
-<input
-    type="text"
-    name="venue"
-    placeholder="Enter event venue"
-    required
->
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter event title"
+                required>
 
 
-<!-- Capacity -->
+            <!-- Description -->
 
-<label>
-    Event Capacity
-</label>
+            <label>
+                Description
+            </label>
 
-<input
-    type="number"
-    name="capacity"
-    id="capacity"
-    min="1"
-    placeholder="Example: 100"
-    required
->
-
-<p class="help">
-    Enter the maximum number of students
-    who can join this event.
-</p>
+            <textarea
+                name="description"
+                placeholder="Enter event description"
+                required></textarea>
 
 
-<!-- Category -->
+            <!-- Date -->
 
-<label>
-    Category ID
-</label>
+            <label>
+                Event Date
+            </label>
 
-<input
-    type="number"
-    name="category_id"
-    min="1"
-    placeholder="Example: 4"
-    required
->
-
-<p class="help">
-    Enter the category ID from the categories table.
-</p>
+            <input
+                type="date"
+                name="event_date"
+                required>
 
 
-<!-- Image -->
+            <!-- Time -->
 
-<label>
-    Event Image
-</label>
+            <label>
+                Event Time
+            </label>
 
-<input
-    type="file"
-    name="image"
-    id="eventImage"
-    accept=".jpg,.jpeg,.png,.gif,.webp"
->
-<img
-    id="imagePreview"
-    src=""
-    alt="Image Preview"
-    style="
+            <input
+                type="time"
+                name="event_time"
+                required>
+
+
+            <!-- Venue -->
+
+            <label>
+                Venue
+            </label>
+
+            <input
+                type="text"
+                name="venue"
+                placeholder="Enter event venue"
+                required>
+
+
+            <!-- Capacity -->
+
+            <label>
+                Event Capacity
+            </label>
+
+            <input
+                type="number"
+                name="capacity"
+                id="capacity"
+                min="1"
+                placeholder="Example: 100"
+                required>
+
+            <p class="help">
+                Enter the maximum number of students
+                who can join this event.
+            </p>
+
+
+            <!-- Category -->
+
+            <label>
+                Category 
+            </label>
+
+          
+            <select name="category_id" min="1"   required>
+                <option value="1">Academic</option>
+                <option value="2">Cultural</option>
+                <option value="3">Entertainment</option>
+                <option value="4">Sports</option>
+                <option value="5">Technology</option>
+                <option value="6">Workshop</option>
+
+            </select>
+
+            <p class="help">
+                Enter the category ID from the categories table.
+            </p>
+
+
+            <!-- Image -->
+
+            <label>
+                Event Image
+            </label>
+
+            <input
+                type="file"
+                name="image"
+                id="eventImage"
+                accept=".jpg,.jpeg,.png,.gif,.webp">
+            <img
+                id="imagePreview"
+                src=""
+                alt="Image Preview"
+                style="
         display: none;
         width: 100%;
         max-height: 250px;
         object-fit: cover;
         margin-top: 10px;
         border-radius: 8px;
-    "
->
+    ">
 
-<p class="help">
-    JPG, JPEG, PNG, GIF or WEBP.
-    Maximum size: 5MB.
-</p>
-
-
-<!-- Submit -->
-
-<button type="submit">
-
-    🎉 Add Event
-
-</button>
+            <p class="help">
+                JPG, JPEG, PNG, GIF or WEBP.
+                Maximum size: 5MB.
+            </p>
 
 
-</form>
+            <!-- Submit -->
+
+            <button type="submit">
+
+                🎉 Add Event
+
+            </button>
 
 
-<a
-    class="back"
-    href="dashboard.php"
->
-    ← Back to Dashboard
-</a>
+        </form>
 
 
-</div>
+        <a
+            class="back"
+            href="dashboard.php">
+            ← Back to Dashboard
+        </a>
+
+
+    </div>
 
 
 </body>
