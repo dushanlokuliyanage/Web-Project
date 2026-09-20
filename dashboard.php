@@ -62,6 +62,8 @@ $upcoming_count =
 
 <head>
 
+<link rel="icon" type="image/png" href="favicon.png">
+
 <meta charset="UTF-8">
 
 <meta
