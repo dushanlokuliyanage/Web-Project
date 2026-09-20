@@ -1,29 +1,42 @@
 <?php
 
-$config_file = __DIR__ . "/.env";
+// Railway: read environment variables first.
+$host     = getenv("DB_HOST");
+$port     = getenv("DB_PORT") ?: 3306;
+$username = getenv("DB_USERNAME");
+$password = getenv("DB_PASSWORD");
+$database = getenv("DB_DATABASE");
 
-if (!is_readable($config_file)) {
-    die("Database configuration file is missing.");
+// Local: fall back to the .env file if Railway variables are not set.
+if ($host === false || $host === "") {
+    $config_file = __DIR__ . "/.env";
+
+    if (!is_readable($config_file)) {
+        die("Database configuration file is missing.");
+    }
+
+    $config = parse_ini_file($config_file);
+
+    if ($config === false) {
+        die("Database configuration file is invalid.");
+    }
+
+    $host     = $config["DB_HOST"] ?? "localhost";
+    $port     = $config["DB_PORT"] ?? 3306;
+    $username = $config["DB_USERNAME"] ?? "";
+    $password = $config["DB_PASSWORD"] ?? "";
+    $database = $config["DB_DATABASE"] ?? "";
 }
 
-$config = parse_ini_file($config_file);
-
-if ($config === false) {
-    die("Database configuration file is invalid.");
-}
-
-$host = $config["DB_HOST"] ?? "localhost";
-$username = $config["DB_USERNAME"] ?? "";
-$password = $config["DB_PASSWORD"] ?? "";
-$database = $config["DB_DATABASE"] ?? "";
-
-$conn = new mysqli($host, $username, $password, $database);
+$conn = new mysqli($host, $username, $password, $database, (int)$port);
 
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
 $conn->set_charset("utf8mb4");
+
+// ... keep your event_registrations CREATE TABLE code below, unchanged
 
 /*
  * This table is used by the dashboard, event details, and registrations pages.
@@ -45,5 +58,3 @@ $registration_table_sql = "
 if (!$conn->query($registration_table_sql)) {
     die("Unable to initialize event registrations: " . $conn->error);
 }
-
-?>
